@@ -14,10 +14,9 @@ export default function App() {
         flex: 1,
         justifyContent: 'Center',
         alignItems: 'Center',
-        backgroundColor: "#cdabab",
+        backgroundColor: "#a24545",
       },
       Text:{
-        fontSize: 32,
-        color: "#ffff"
+        color: "#937f7f"
       }
    })
