@@ -3,7 +3,7 @@ module.exports = function (api) {
   return {
     presets: [
       ["babel-preset-expo", { jsxImportSource: "nativewind" }],
-      "nativewind/babel",
+      "nativewind/babel", // 👈 關鍵：它必須放在 presets 裡面！
     ],
   };
 };
