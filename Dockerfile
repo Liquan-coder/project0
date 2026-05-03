@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
 
+FROM nginx:1.27-alpine AS runner
 FROM node:20-alpine AS builder
 WORKDIR /app
 

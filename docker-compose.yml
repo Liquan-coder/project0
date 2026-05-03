@@ -1,0 +1,40 @@
+services:
+  # ----------------------------------------------------
+  # 🧑‍💻 開發環境：你的「廚房」 (負責寫 Code 與熱更新)
+  # ----------------------------------------------------
+  dev-node:
+    image: node:20-alpine
+    container_name: carpool-dev
+    working_dir: /app
+    ports:
+      # Expo Web 預設使用 8081 port
+      - "8081:8081"
+    volumes:
+      # 1. 將你 Mac 上的原始碼同步進 Container
+      - .:/app
+      # 2. 【關鍵】匿名掛載：把 node_modules 留在容器內，解決 lightningcss 跨平台報錯
+      - /app/node_modules
+    # 啟動時自動安裝套件，並開啟 Expo Web 開發伺服器
+    command: sh -c "npm install && npx expo start --web"
+    environment:
+      # 設定為開發模式
+      - NODE_ENV=development
+    # 等同於 docker run 的 -it 參數，保持終端機互動開啟
+    stdin_open: true
+    tty: true
+
+  # ----------------------------------------------------
+  # 📦 測試上線環境：你的「展示櫃檯」 (負責檢驗打包後的成品)
+  # ----------------------------------------------------
+  prod-nginx:
+    image: nginx:1.27-alpine
+    container_name: carpool-prod
+    ports:
+      # 將 Nginx 的 80 port 對應到你 Mac 的 8080 port
+      - "8080:80"
+    volumes:
+      # 將你打包出來的 dist 資料夾，直接放到 Nginx 的網頁目錄中
+      - ./dist:/usr/share/nginx/html
+    # 讓這個服務依賴於 dev-node，確保啟動順序
+    depends_on:
+      - dev-node
