@@ -1,9 +1,9 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: carpool-app:latest
+  dev:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app  # 這樣你改本機的 app.js，容器裡才會同步更新
     ports:
-      - "8080:80"
-    restart: unless-stopped
+      - "8081:8081"
+    command: sh -c "npm install && npx expo start --web"

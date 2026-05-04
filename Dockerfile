@@ -1,19 +1,7 @@
-# syntax=docker/dockerfile:1
-
-FROM nginx:1.27-alpine AS runner
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 WORKDIR /app
-
-ENV CI=1
-
 COPY package.json package-lock.json ./
-RUN npm ci
-
+RUN npm install
 COPY . .
-RUN npx expo export --platform web
-
-FROM nginx:1.27-alpine AS runner
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# 不要用 nginx，直接啟動開發伺服器
+CMD ["npx", "expo", "start", "--web"]
